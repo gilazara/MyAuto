@@ -15,13 +15,7 @@ const Filters = () => {
     setFilters(newFilters);
   };
 
-  return (
-    <div className="w-full mt-[42px]">
-      <div className="w-[250px]">
-        <FiltersForm filters={filters} onFilterChange={handleFilterChange} />
-      </div>
-    </div>
-  );
+  return <FiltersForm filters={filters} onFilterChange={handleFilterChange} />;
 };
 
 export default Filters;

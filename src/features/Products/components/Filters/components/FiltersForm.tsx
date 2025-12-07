@@ -1,4 +1,5 @@
 import { useForm } from 'react-hook-form';
+import { useSearchParams } from 'react-router-dom';
 import { Button } from '@/shared';
 import { SelectField } from '@/shared/components/Select';
 import VehicleTabs from './VehicleTabs';
@@ -15,22 +16,42 @@ interface Props {
 type VehicleType = 'all' | 'car' | 'moto' | 'tractor';
 
 interface FilterFormData {
-  vehicleType?: VehicleType;
-  forRent?: '0' | '1';
-  mans?: string;
-  cats?: string;
-  priceFrom?: number | '';
-  priceTo?: number | '';
+  vehicleType?: VehicleType | undefined;
+  forRent?: '0' | '1' | undefined;
+  mans?: string | undefined;
+  cats?: string | undefined;
+  priceFrom?: number | '' | undefined;
+  priceTo?: number | '' | undefined;
 }
 
 const FiltersForm = ({ filters, onFilterChange }: Props) => {
   const { categories } = useCategories();
   const { manufacturers } = useManufactrurs();
 
+  const [searchParams, setSearchParams] = useSearchParams();
+  const defaultForRent = (searchParams.get('ForRent') as '0' | '1') ?? null;
+  const defaultMans = searchParams.get('Mans');
+  const defaultCats = searchParams.get('Cats');
+  const defaultPriceFromStr = searchParams.get('PriceFrom');
+  const defaultPriceToStr = searchParams.get('PriceTo');
+
+  const defaultValues: FilterFormData = {
+    vehicleType: 'car',
+    forRent: defaultForRent ?? undefined,
+    mans: defaultMans ?? undefined,
+    cats: defaultCats ?? undefined,
+    priceFrom:
+      defaultPriceFromStr && !Number.isNaN(Number(defaultPriceFromStr))
+        ? Number(defaultPriceFromStr)
+        : undefined,
+    priceTo:
+      defaultPriceToStr && !Number.isNaN(Number(defaultPriceToStr))
+        ? Number(defaultPriceToStr)
+        : undefined,
+  };
+
   const { control, handleSubmit, watch, setValue, register } =
-    useForm<FilterFormData>({
-      defaultValues: { vehicleType: 'car' },
-    });
+    useForm<FilterFormData>({ defaultValues });
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const vehicleType = watch('vehicleType');
@@ -63,16 +84,13 @@ const FiltersForm = ({ filters, onFilterChange }: Props) => {
       SortOrder: filters?.SortOrder ?? 1,
     };
 
-    const params = new URLSearchParams(window.location.search);
-
+    const params = new URLSearchParams(searchParams);
     params.set('Cats', nextFilters.Cats);
     params.set('Mans', nextFilters.Mans);
     params.set('ForRent', String(nextFilters.ForRent));
     params.set('PriceFrom', String(nextFilters.PriceFrom));
     params.set('PriceTo', String(nextFilters.PriceTo));
-
-    const newUrl = `${window.location.pathname}?${params.toString()}`;
-    window.history.replaceState({}, '', newUrl);
+    setSearchParams(params, { replace: true });
 
     onFilterChange(nextFilters);
   };
