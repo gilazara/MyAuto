@@ -1,17 +1,30 @@
-import { Controller, type Control, type FieldValues, type Path, type RegisterOptions } from 'react-hook-form';
+import {
+  Controller,
+  type Control,
+  type FieldValues,
+  type Path,
+  type RegisterOptions,
+} from 'react-hook-form';
 import { Select, type SelectProps } from './Select';
 
 export interface SelectFieldProps<T extends FieldValues>
   extends Omit<SelectProps, 'value' | 'onChange' | 'error'> {
   name: Path<T>;
   control: Control<T>;
-  rules?: Omit<RegisterOptions<T, Path<T>>, 'disabled' | 'valueAsNumber' | 'valueAsDate' | 'setValueAs'> | undefined;
+  rules?:
+    | Omit<
+        RegisterOptions<T, Path<T>>,
+        'disabled' | 'valueAsNumber' | 'valueAsDate' | 'setValueAs'
+      >
+    | undefined;
+  onValueChange?: (value: string) => void;
 }
 
 export function SelectField<T extends FieldValues>({
   name,
   control,
   rules,
+  onValueChange,
   ...selectProps
 }: SelectFieldProps<T>) {
   return (
@@ -23,7 +36,10 @@ export function SelectField<T extends FieldValues>({
         <Select
           {...selectProps}
           value={field.value}
-          onChange={field.onChange}
+          onChange={(value) => {
+            field.onChange(value);
+            onValueChange?.(value);
+          }}
           error={error?.message ?? undefined}
         />
       )}

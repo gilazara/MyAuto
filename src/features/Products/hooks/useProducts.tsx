@@ -1,5 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import type { FilterState, Product } from '@/features/Products/types/types';
+import type {
+  FilterState,
+  ProductsResponse,
+} from '@/features/Products/types/types';
 import { getProducts } from '@/features/Products/service/products.service';
 
 const productsKey = (filters: FilterState) => [
@@ -9,19 +12,20 @@ const productsKey = (filters: FilterState) => [
   filters.ForRent,
   filters.PriceFrom,
   filters.PriceTo,
-  filters.Period ?? '1d',
-  filters.SortOrder ?? 1,
+  filters.Period,
+  filters.SortOrder,
 ];
 
 export const useProducts = (filters: FilterState) => {
-  const query = useQuery<Product[]>({
+  const query = useQuery<ProductsResponse>({
     queryKey: productsKey(filters),
     queryFn: () => getProducts(filters),
-    select: (data) => data ?? [],
+    select: (response) => response,
   });
 
   return {
-    products: query.data ?? [],
+    products: query.data?.data.items ?? [],
+    meta: query.data?.data.meta,
     isLoading: query.isLoading,
     isFetching: query.isFetching,
     error: query.error,

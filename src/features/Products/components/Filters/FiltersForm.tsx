@@ -2,16 +2,15 @@ import { useForm } from 'react-hook-form';
 import { useSearchParams } from 'react-router-dom';
 import { Button } from '@/shared';
 import { SelectField } from '@/shared/components/Select';
-import VehicleTabs from './VehicleTabs';
-import useCategories from '../hooks/useCategories';
-import type { Category, Manufacturer } from '../types/filters.types';
-import useManufactrurs from '../hooks/useManufacturers';
-import type { FilterState } from '@/features/Products/types/types';
+import VehicleTabs from './components/VehicleTabs';
+import useCategories from './hooks/useCategories';
+import type { Category, Manufacturer } from './types/filters.types';
+import useManufactrurs from './hooks/useManufacturers';
 
-interface Props {
-  filters: FilterState;
-  onFilterChange: (filters: FilterState) => void;
-}
+const forRentOptions = [
+  { value: '0', label: 'იყიდება' },
+  { value: '1', label: 'ქირავდება' },
+];
 
 type VehicleType = 'all' | 'car' | 'moto' | 'tractor';
 
@@ -24,7 +23,7 @@ interface FilterFormData {
   priceTo?: number | '' | undefined;
 }
 
-const FiltersForm = ({ filters, onFilterChange }: Props) => {
+const FiltersForm = () => {
   const { categories } = useCategories();
   const { manufacturers } = useManufactrurs();
 
@@ -68,31 +67,40 @@ const FiltersForm = ({ filters, onFilterChange }: Props) => {
       value: String(el.man_id),
     })) ?? [];
 
-  const forRentOptions = [
-    { value: '0', label: 'იყიდება' },
-    { value: '1', label: 'ქირავდება' },
-  ];
-
   const onSubmit = (data: FilterFormData) => {
-    const nextFilters: FilterState = {
-      Cats: data.cats ?? '',
-      Mans: data.mans ?? '',
-      ForRent: data.forRent ?? '0',
-      PriceFrom: typeof data.priceFrom === 'number' ? data.priceFrom : 0,
-      PriceTo: typeof data.priceTo === 'number' ? data.priceTo : 0,
-      Period: filters?.Period ?? '1d',
-      SortOrder: filters?.SortOrder ?? 1,
-    };
-
     const params = new URLSearchParams(searchParams);
-    params.set('Cats', nextFilters.Cats);
-    params.set('Mans', nextFilters.Mans);
-    params.set('ForRent', String(nextFilters.ForRent));
-    params.set('PriceFrom', String(nextFilters.PriceFrom));
-    params.set('PriceTo', String(nextFilters.PriceTo));
-    setSearchParams(params, { replace: true });
 
-    onFilterChange(nextFilters);
+    if (data.cats) {
+      params.set('Cats', data.cats);
+    } else {
+      params.delete('Cats');
+    }
+
+    if (data.mans) {
+      params.set('Mans', data.mans);
+    } else {
+      params.delete('Mans');
+    }
+
+    if (data.forRent) {
+      params.set('ForRent', data.forRent);
+    } else {
+      params.delete('ForRent');
+    }
+
+    if (typeof data.priceFrom === 'number' && data.priceFrom > 0) {
+      params.set('PriceFrom', String(data.priceFrom));
+    } else {
+      params.delete('PriceFrom');
+    }
+
+    if (typeof data.priceTo === 'number' && data.priceTo > 0) {
+      params.set('PriceTo', String(data.priceTo));
+    } else {
+      params.delete('PriceTo');
+    }
+
+    setSearchParams(params, { replace: true });
   };
 
   const handleFormSubmit = (e: React.FormEvent) => {
@@ -119,7 +127,6 @@ const FiltersForm = ({ filters, onFilterChange }: Props) => {
           options={forRentOptions}
           placeholder="იყიდება"
         />
-
         <SelectField
           name="mans"
           control={control}
@@ -127,7 +134,6 @@ const FiltersForm = ({ filters, onFilterChange }: Props) => {
           options={manufacturersOptions}
           placeholder="ყველა მწარმოებელი"
         />
-
         <SelectField
           name="cats"
           control={control}
