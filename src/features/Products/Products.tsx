@@ -42,10 +42,7 @@ export const Products = () => {
           <FiltersForm />
         </div>
         <div className="flex-1">
-          <ProductList products={products} />
-          {isLoading && (
-            <div className="mt-4 text-sm text-gray-500">იტვირთება…</div>
-          )}
+          <ProductList products={products} isLoading={isLoading} />
         </div>
       </div>
     </Container>

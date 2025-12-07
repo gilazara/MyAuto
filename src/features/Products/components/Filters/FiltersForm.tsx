@@ -125,7 +125,7 @@ const FiltersForm = () => {
           control={control}
           label="გარიგების ტიპი"
           options={forRentOptions}
-          placeholder="იყიდება"
+          placeholder="აირჩიე ტიპი"
         />
         <SelectField
           name="mans"

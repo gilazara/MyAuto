@@ -16,6 +16,7 @@ export interface SelectProps {
   error?: string | undefined;
   label?: string;
   variant?: 'primary' | 'secondary';
+  isClearable?: boolean;
 }
 
 export const Select = ({
@@ -28,6 +29,7 @@ export const Select = ({
   error,
   label,
   variant = 'primary',
+  isClearable = true,
 }: SelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
@@ -57,6 +59,12 @@ export const Select = ({
     onChange(optionValue);
     setIsOpen(false);
     setHighlightedIndex(-1);
+  };
+
+  const handleClear = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onChange('');
+    setIsOpen(false);
   };
 
   const baseButtonClasses = useMemo(
@@ -165,21 +173,44 @@ export const Select = ({
             {selectedOption ? selectedOption.label : placeholder}
           </span>
         </div>
-        <svg
-          className={`w-5 h-5 ${chevronColorClass} transition-transform duration-200 ${
-            isOpen ? 'transform rotate-180' : ''
-          }`}
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 9l-7 7-7-7"
-          />
-        </svg>
+        {isClearable && selectedOption && !disabled ? (
+          <button
+            type="button"
+            onClick={handleClear}
+            className={`p-1 rounded cursor-pointer transition-colors ${chevronColorClass}`}
+            aria-label="Clear selection"
+          >
+            <svg
+              className="w-3 h-3"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        ) : (
+          <svg
+            className={`w-5 h-5 ${chevronColorClass} transition-transform duration-200 ${
+              isOpen ? 'transform rotate-180' : ''
+            }`}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        )}
       </button>
 
       {isOpen && (
