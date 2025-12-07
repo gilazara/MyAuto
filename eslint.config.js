@@ -56,7 +56,6 @@ export default defineConfig([
       'object-shorthand': 'warn',
       'prefer-arrow-callback': 'warn',
       'prefer-template': 'warn',
-      'no-nested-ternary': 'warn',
       'no-duplicate-imports': 'error',
       eqeqeq: ['error', 'always', { null: 'ignore' }],
       curly: ['warn', 'all'],

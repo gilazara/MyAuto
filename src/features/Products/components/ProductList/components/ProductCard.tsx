@@ -1,123 +1,119 @@
 import type { Product } from '@/features/Products/types/types';
+import {
+  daysSince,
+  generateImageUrl,
+  getFuelTypeLabel,
+  getGearTypeLabel,
+} from '@/utils/utils';
+import { useState } from 'react';
+import useManufactrurs from '@/features/Products/components/Filters/hooks/useManufacturers';
+import InfoDetail from './InfoDetail';
+import { ReactComponent as LariSvg } from '@assets/lari.svg';
+import { ReactComponent as DollarSvg } from '@assets/dollar.svg';
 
 interface Props {
   product: Product;
 }
 
 const ProductCard = ({ product }: Props) => {
+  const [currency, setCurrency] = useState('USD');
+  const { map: manufacturersMap } = useManufactrurs();
+
+  const {
+    photo,
+    daily_views,
+    photo_ver,
+    engine_volume,
+    man_id,
+    prod_year,
+    customs_passed,
+    gear_type_id,
+    fuel_type_id,
+    car_run_km,
+    order_date,
+    right_wheel,
+    price_usd,
+  } = product;
+
+  const productTitle = manufacturersMap?.[man_id] ?? '';
+
   return (
-    <div className="bg-white rounded-xl shadow-sm p-3 max-w-3xl mx-auto font-sans">
-      <div className="flex">
-        <img
-          src="https://your-image-url.com/car.jpg" // replace with your actual image path
-          alt="Land Rover Range Rover Evoque"
-          className="w-36 h-28 object-cover rounded-lg"
-        />
-
-        <div className="flex-1 ml-4">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-lg font-semibold leading-tight">
-              LAND ROVER Range Rover Evoque
-            </span>
-            <span className="text-gray-400 text-sm ml-2">2013 წ</span>
-          </div>
-
-          <div className="flex gap-8 mt-2 text-gray-700 text-sm">
-            <span className="flex items-center gap-1">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor">
-                <circle cx="8" cy="8" r="7" strokeWidth="2" />
-              </svg>
-              1.8 დტ. ჰიბრიდი
-            </span>
-            <span className="flex items-center gap-1">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor">
-                <path d="M2 8a6 6 0 1112 0a6 6 0 01-12 0z" />
-              </svg>
-              200 000 კმ
-            </span>
-          </div>
-
-          <div className="flex gap-8 mt-2 text-gray-700 text-sm">
-            <span className="flex items-center gap-1">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor">
-                <rect
-                  x="2"
-                  y="2"
-                  width="12"
-                  height="12"
-                  rx="2"
-                  strokeWidth="2"
-                />
-              </svg>
-              ატომატიკა
-            </span>
-            <span className="flex items-center gap-1">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor">
-                <circle cx="8" cy="8" r="6" />
-                <path d="M8 2v12" />
-              </svg>
-              მარჩევანა
-            </span>
-          </div>
-        </div>
-
-        <div className="flex flex-col items-end justify-between ml-6 min-w-[120px]">
-          <div className="flex items-center gap-2">
-            <span className="text-red-500 text-sm font-medium">
-              განაკვეთი 2,176 ₾
-            </span>
-            <span className="text-gray-400 ml-1">|</span>
-            <span className="text-gray-500 text-sm flex items-center">
-              <span role="img" aria-label="GB" className="text-lg">
-                🇬🇧
+    <article className="bg-white h-[180px] rounded-xl w-full shadow-sm p-3 max-w-3xl mx-auto font-sans">
+      <div className="flex gap-4">
+        <figure className="w-62 h-36 overflow-hidden rounded-lg cursor-pointer">
+          <img
+            src={generateImageUrl(photo, daily_views?.product_id, photo_ver)}
+            alt={`${productTitle} Image`}
+            className="w-full h-full rounded-lg transition-transform duration-300 ease-in-out hover:scale-110"
+          />
+        </figure>
+        <section className="w-full flex flex-col justify-between">
+          <header className="flex items-center justify-between">
+            <h3 className="text-lg text-black">
+              {productTitle} <span className="text-md">{`${prod_year}წ`}</span>
+            </h3>
+            <aside className="flex items-center gap-3">
+              <div className="flex items-center text-xs bg-gray-100 rounded-md overflow-hidden border"></div>
+              <span
+                className={`text-sm ${
+                  customs_passed ? 'text-green-600' : 'text-red-600'
+                }`}
+              >
+                {customs_passed ? 'განბაჟებული' : 'განბაჟება'}
               </span>
-              <span className="ml-1">გიბშია</span>
-            </span>
-          </div>
-          <span className="text-2xl font-bold text-gray-700 mt-2">
-            40,159 <span className="text-gray-400 text-base">₾</span>
-          </span>
-        </div>
+            </aside>
+          </header>
+          <main>
+            <div className="flex w-full justify-between">
+              <dl className="flex gap-4">
+                <InfoDetail icon={<LariSvg></LariSvg>}>
+                  {engine_volume / 1000} {getFuelTypeLabel(fuel_type_id)}
+                </InfoDetail>
+                <InfoDetail icon={<LariSvg></LariSvg>}>
+                  {car_run_km}კმ
+                </InfoDetail>
+              </dl>
+              <div className="flex items-center gap-2">
+                {price_usd === 0 ? (
+                  <span className="text-sm">შეთანხმებით</span>
+                ) : (
+                  <button
+                    onClick={() =>
+                      setCurrency(currency === 'USD' ? 'GEL' : 'USD')
+                    }
+                    aria-label="Show price in USD"
+                    className="flex items-center gap-1"
+                  >
+                    {currency === 'USD'
+                      ? price_usd
+                      : Math.round((price_usd ?? 0) / 2.7)}
+                    {currency === 'USD' ? (
+                      <span className="p-0.2 bg-gray-100 rounded-3xl cursor-pointer">
+                        <DollarSvg className="w-6 h-6" />
+                      </span>
+                    ) : (
+                      <LariSvg className="w-6 h-6 cursor-pointer" />
+                    )}
+                  </button>
+                )}
+              </div>
+            </div>
+            <dl className="flex gap-4 mt-2">
+              <InfoDetail icon={<LariSvg></LariSvg>}>
+                {getGearTypeLabel(gear_type_id)}
+              </InfoDetail>
+              <InfoDetail icon={<LariSvg></LariSvg>}>
+                {right_wheel ? 'მარჯვენა' : 'მარცხენა'}
+              </InfoDetail>
+            </dl>
+          </main>
+          <footer className="flex gap-2">
+            <span className="text-sm">{daily_views?.views ?? 0} ნახვა</span>
+            <time className="text-sm">{daysSince(order_date)}</time>
+          </footer>
+        </section>
       </div>
-
-      <div className="flex items-center justify-between mt-4 text-gray-500 text-sm">
-        <span>589 ნახვა • 2 დღის წინ</span>
-        <div className="flex gap-4 items-center">
-          <button className="hover:text-blue-600">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor">
-              <rect x="4" y="4" width="12" height="12" rx="2" strokeWidth="2" />
-            </svg>
-          </button>
-          <button className="hover:text-blue-600">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor">
-              <path d="M4 12v-8m0 8l2-2m-2 2l-2-2" />
-              <circle cx="12" cy="6" r="2" />
-            </svg>
-          </button>
-          <button className="hover:text-red-500">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor">
-              <path d="M4 8c0-2 3-2 4 0 1-2 4-2 4 0 0 2-2 4-4 8-2-4-4-6-4-8z" />
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      <div className="border-t mt-3 mb-1"></div>
-
-      <div className="flex items-center mt-2 gap-3">
-        <img
-          src="https://your-image-url.com/mctrans-logo.png"
-          alt="MC TRANS"
-          className="w-10 h-10 rounded-md border"
-        />
-        <div>
-          <span className="font-semibold text-gray-700">MC TRANS</span>
-          <span className="text-gray-500 text-xs ml-1">
-            ყველა განაცხადება (26)
-          </span>
-        </div>
-      </div>
-    </div>
+    </article>
   );
 };
 

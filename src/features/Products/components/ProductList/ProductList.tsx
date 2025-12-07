@@ -19,7 +19,10 @@ const ProductList = ({ products = [], isLoading }: Props) => {
         {isLoading && <Loader />}
         {!isLoading &&
           products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard
+              product={product}
+              key={product.daily_views?.product_id}
+            />
           ))}
       </div>
     </div>

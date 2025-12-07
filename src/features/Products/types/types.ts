@@ -22,10 +22,24 @@ export interface FilterState {
 }
 
 export interface Product {
-  id: number;
-  title?: string;
-  price?: number;
-  image?: string;
+  photo: string;
+  photo_ver: string;
+  daily_views: { product_id: number; views: number };
+  pic_number: number;
+  customs_passed: boolean;
+  man_id: string;
+  model_id?: number;
+  prod_year: number;
+  engine_volume: number;
+  fuel_type_id: number;
+  car_run_km: number;
+  gear_type_id: number;
+  right_wheel: boolean;
+  price: number;
+  price_usd?: number;
+  car_id: number;
+  order_date: string;
+  product_id: number;
 }
 
 export interface ProductsMeta {
