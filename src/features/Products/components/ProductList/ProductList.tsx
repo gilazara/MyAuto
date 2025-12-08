@@ -1,14 +1,21 @@
-import type { Product } from '../../types/types';
+import type { Product, ProductsMeta } from '../../types/types';
 import ProductCard from './components/ProductCard';
 import SortAndTimeFilters from './components/SortAndTimeFilters';
-import { Loader } from '@/shared';
+import { Loader, Pagination } from '@/shared';
 
 interface Props {
   products: Product[];
+  meta: ProductsMeta | undefined;
   isLoading: boolean;
+  onPageChange: (page: number) => void;
 }
 
-const ProductList = ({ products = [], isLoading }: Props) => {
+const ProductList = ({
+  products = [],
+  meta,
+  isLoading,
+  onPageChange,
+}: Props) => {
   return (
     <div className="w-full">
       <div className="flex justify-between items-center">
@@ -25,6 +32,11 @@ const ProductList = ({ products = [], isLoading }: Props) => {
             />
           ))}
       </div>
+      {products.length > 0 && (
+        <div className="bg-white mb-10 rounded-xl w-full shadow-sm p-3 max-w-3xl mx-auto font-sans">
+          <Pagination meta={meta} onPageChange={onPageChange} />
+        </div>
+      )}
     </div>
   );
 };

@@ -14,6 +14,7 @@ const productsKey = (filters: FilterState) => [
   filters.PriceTo,
   filters.Period,
   filters.SortOrder,
+  filters.Page,
 ];
 
 export const useProducts = (filters: FilterState) => {

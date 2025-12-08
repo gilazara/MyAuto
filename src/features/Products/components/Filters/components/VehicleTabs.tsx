@@ -2,41 +2,31 @@ import { Tab } from '@/shared';
 import { ReactComponent as CarIcon } from '@assets/car.svg';
 import { ReactComponent as MotoIcon } from '@assets/moto.svg';
 import { ReactComponent as TractorIcon } from '@assets/tractor.svg';
+import type { VehicleType } from '../types/filters.types';
+import { useState } from 'react';
 
-type VehicleType = 'all' | 'car' | 'moto' | 'tractor';
+const VEHICLE_TABS = [
+  { type: 'car' as VehicleType, Icon: CarIcon },
+  { type: 'tractor' as VehicleType, Icon: TractorIcon },
+  { type: 'moto' as VehicleType, Icon: MotoIcon },
+];
 
-interface VehicleTabsProps {
-  vehicleType: VehicleType;
-  onVehicleTypeChange: (type: VehicleType) => void;
-}
-
-const VehicleTabs = ({
-  vehicleType,
-  onVehicleTypeChange,
-}: VehicleTabsProps) => {
+const VehicleTabs = () => {
+  const [vehicleType, setVehicleType] = useState<VehicleType>('car');
   const getIconColor = (type: VehicleType) =>
     vehicleType === type ? 'var(--color-brand)' : 'var(--color-text-muted)';
 
   return (
-    <div className="w-full flex">
-      <Tab
-        isActive={vehicleType === 'car'}
-        onClick={() => onVehicleTypeChange('car')}
-      >
-        <CarIcon className="w-[62px] h-8" color={getIconColor('car')} />
-      </Tab>
-      <Tab
-        isActive={vehicleType === 'tractor'}
-        onClick={() => onVehicleTypeChange('tractor')}
-      >
-        <TractorIcon className="w-[62px] h-8" color={getIconColor('tractor')} />
-      </Tab>
-      <Tab
-        isActive={vehicleType === 'moto'}
-        onClick={() => onVehicleTypeChange('moto')}
-      >
-        <MotoIcon className="w-[62px] h-8" color={getIconColor('moto')} />
-      </Tab>
+    <div className="w-full flex mb-6">
+      {VEHICLE_TABS.map(({ type, Icon }) => (
+        <Tab
+          key={type}
+          isActive={vehicleType === type}
+          onClick={() => setVehicleType(type)}
+        >
+          <Icon className="w-[62px] h-8" color={getIconColor(type)} />
+        </Tab>
+      ))}
     </div>
   );
 };

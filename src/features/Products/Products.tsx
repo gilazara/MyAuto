@@ -18,7 +18,7 @@ const items = [
 ];
 
 export const Products = () => {
-  const [params] = useSearchParams();
+  const [params, setParams] = useSearchParams();
 
   const filters: FilterState = useMemo(() => {
     return {
@@ -29,10 +29,18 @@ export const Products = () => {
       PriceTo: params.get('PriceTo'),
       Period: params.get('Period') as Period,
       SortOrder: params.get('SortOrder') as SortOrder,
+      Page: params.get('Page') ? Number(params.get('Page')) : 1,
     };
   }, [params]);
 
-  const { products, isLoading } = useProducts(filters);
+  const { products, meta, isLoading } = useProducts(filters);
+
+  const handlePageChange = (page: number) => {
+    const newParams = new URLSearchParams(params);
+    newParams.set('Page', page.toString());
+    setParams(newParams);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <Container>
@@ -42,7 +50,12 @@ export const Products = () => {
           <FiltersForm />
         </div>
         <div className="flex-1">
-          <ProductList products={products} isLoading={isLoading} />
+          <ProductList
+            products={products}
+            meta={meta}
+            isLoading={isLoading}
+            onPageChange={handlePageChange}
+          />
         </div>
       </div>
     </Container>

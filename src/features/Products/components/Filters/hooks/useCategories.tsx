@@ -9,7 +9,7 @@ const useCategoriesList = () => {
 
   return {
     isLoading,
-    categories: data?.data,
+    categories: data?.data || [],
   };
 };
 export default useCategoriesList;

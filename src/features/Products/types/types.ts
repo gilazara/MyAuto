@@ -52,3 +52,10 @@ export interface ProductsMeta {
 export interface ProductsResponse {
   data: { items: Product[]; meta?: ProductsMeta };
 }
+
+export const Currency = {
+  USD: 'USD',
+  GEL: 'GEL',
+} as const;
+
+export type Currency = (typeof Currency)[keyof typeof Currency];

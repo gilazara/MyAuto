@@ -41,3 +41,14 @@ export function daysSince(pastDate: string | Date): string | number {
 
   return `${diffDays} დღის წინ`;
 }
+
+export function transformForSelect<T>(
+  data: T[],
+  labelKey: keyof T,
+  valueKey: keyof T
+): { label: string; value: string }[] {
+  return data.map((item) => ({
+    label: String(item[labelKey]),
+    value: String(item[valueKey]),
+  }));
+}

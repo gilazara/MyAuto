@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchManufacturersList } from '../service/filters.service';
-// import type { Manufacturer } from '../types/filters.types';
 
 const useManufactrurs = () => {
   const { data, isLoading } = useQuery({
@@ -14,7 +13,7 @@ const useManufactrurs = () => {
   return {
     map,
     isLoading,
-    manufacturers: data,
+    manufacturers: data || [],
   };
 };
 export default useManufactrurs;

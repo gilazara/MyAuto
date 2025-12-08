@@ -1,4 +1,4 @@
-import type { Product } from '@/features/Products/types/types';
+import { Currency, type Product } from '@/features/Products/types/types';
 import {
   daysSince,
   generateImageUrl,
@@ -16,7 +16,7 @@ interface Props {
 }
 
 const ProductCard = ({ product }: Props) => {
-  const [currency, setCurrency] = useState('USD');
+  const [currency, setCurrency] = useState<Currency>(Currency.USD);
   const { map: manufacturersMap } = useManufactrurs();
 
   const {
@@ -79,15 +79,16 @@ const ProductCard = ({ product }: Props) => {
                 ) : (
                   <button
                     onClick={() =>
-                      setCurrency(currency === 'USD' ? 'GEL' : 'USD')
+                      setCurrency(
+                        currency === Currency.USD ? Currency.GEL : Currency.USD
+                      )
                     }
-                    aria-label="Show price in USD"
                     className="flex items-center gap-1"
                   >
-                    {currency === 'USD'
+                    {currency === Currency.USD
                       ? price_usd
                       : Math.round((price_usd ?? 0) / 2.7)}
-                    {currency === 'USD' ? (
+                    {currency === Currency.USD ? (
                       <span className="p-0.2 bg-gray-100 rounded-3xl cursor-pointer">
                         <DollarSvg className="w-6 h-6" />
                       </span>

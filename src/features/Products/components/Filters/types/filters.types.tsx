@@ -18,3 +18,5 @@ export interface Manufacturer {
   is_spec: number;
   is_moto: number;
 }
+
+export type VehicleType = 'all' | 'car' | 'moto' | 'tractor';

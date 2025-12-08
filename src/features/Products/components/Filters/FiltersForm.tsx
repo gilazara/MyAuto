@@ -2,9 +2,9 @@ import { useForm } from 'react-hook-form';
 import { useSearchParams } from 'react-router-dom';
 import { Button } from '@/shared';
 import { SelectField } from '@/shared/components/Select';
+import { transformForSelect } from '@/utils/utils';
 import VehicleTabs from './components/VehicleTabs';
 import useCategories from './hooks/useCategories';
-import type { Category, Manufacturer } from './types/filters.types';
 import useManufactrurs from './hooks/useManufacturers';
 
 const forRentOptions = [
@@ -12,11 +12,8 @@ const forRentOptions = [
   { value: '1', label: 'ქირავდება' },
 ];
 
-type VehicleType = 'all' | 'car' | 'moto' | 'tractor';
-
 interface FilterFormData {
-  vehicleType?: VehicleType | undefined;
-  forRent?: '0' | '1' | undefined;
+  forRent?: string | undefined;
   mans?: string | undefined;
   cats?: string | undefined;
   priceFrom?: number | '' | undefined;
@@ -24,24 +21,21 @@ interface FilterFormData {
 }
 
 const FiltersForm = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const { categories } = useCategories();
   const { manufacturers } = useManufactrurs();
 
-  const [searchParams, setSearchParams] = useSearchParams();
-  const defaultForRent = (searchParams.get('ForRent') as '0' | '1') ?? null;
-  const defaultMans = searchParams.get('Mans');
-  const defaultCats = searchParams.get('Cats');
-  const defaultPriceFromStr = searchParams.get('PriceFrom');
   const defaultPriceToStr = searchParams.get('PriceTo');
+  const defaultPriceFromStr = searchParams.get('PriceFrom');
 
   const defaultValues: FilterFormData = {
-    vehicleType: 'car',
-    forRent: defaultForRent ?? undefined,
-    mans: defaultMans ?? undefined,
-    cats: defaultCats ?? undefined,
+    forRent: searchParams.get('ForRent') ?? undefined,
+    mans: searchParams.get('Mans') ?? undefined,
+    cats: searchParams.get('Cats') ?? undefined,
     priceFrom:
       defaultPriceFromStr && !Number.isNaN(Number(defaultPriceFromStr))
-        ? Number(defaultPriceFromStr)
+        ? Number(searchParams.get('PriceFrom'))
         : undefined,
     priceTo:
       defaultPriceToStr && !Number.isNaN(Number(defaultPriceToStr))
@@ -49,23 +43,21 @@ const FiltersForm = () => {
         : undefined,
   };
 
-  const { control, handleSubmit, watch, setValue, register } =
-    useForm<FilterFormData>({ defaultValues });
+  const { control, handleSubmit, register } = useForm<FilterFormData>({
+    defaultValues,
+  });
 
-  // eslint-disable-next-line react-hooks/incompatible-library
-  const vehicleType = watch('vehicleType');
+  const categoryOptions = transformForSelect(
+    categories,
+    'title',
+    'category_id'
+  );
 
-  const categoryOptions =
-    categories?.map((el: Category) => ({
-      label: el.title,
-      value: String(el.category_id),
-    })) ?? [];
-
-  const manufacturersOptions =
-    manufacturers?.map((el: Manufacturer) => ({
-      label: el.man_name,
-      value: String(el.man_id),
-    })) ?? [];
+  const manufacturersOptions = transformForSelect(
+    manufacturers,
+    'man_name',
+    'man_id'
+  );
 
   const onSubmit = (data: FilterFormData) => {
     const params = new URLSearchParams(searchParams);
@@ -112,12 +104,7 @@ const FiltersForm = () => {
       onSubmit={handleFormSubmit}
       className="bg-surface rounded-lg shadow-md"
     >
-      <div className="mb-6">
-        <VehicleTabs
-          vehicleType={vehicleType ?? 'car'}
-          onVehicleTypeChange={(type) => setValue('vehicleType', type)}
-        />
-      </div>
+      <VehicleTabs />
 
       <div className="flex flex-col gap-4 px-6">
         <SelectField

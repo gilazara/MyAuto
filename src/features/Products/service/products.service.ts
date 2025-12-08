@@ -12,7 +12,7 @@ export const getProducts = async (
     PriceTo: filters.PriceTo,
     Period: filters.Period,
     SortOrder: filters.SortOrder,
-    Page: 1,
+    Page: filters.Page,
   };
 
   const { data } = await api2AxiosInstance.get<ProductsResponse>(
