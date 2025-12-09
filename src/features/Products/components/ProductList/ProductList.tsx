@@ -1,6 +1,7 @@
 import type { Product, ProductsMeta } from '../../types/types';
 import ProductCard from './components/ProductCard';
 import SortAndTimeFilters from './components/SortAndTimeFilters';
+import MobileFilters from './components/MobileFilters';
 import { Loader, Pagination } from '@/shared';
 
 interface Props {
@@ -17,13 +18,14 @@ const ProductList = ({
   onPageChange,
 }: Props) => (
   <>
-    <div className="flex w-full justify-between items-center">
-      <h3 className="text-[12px] md:text-[14px] min-w-[220px] lg:text-[16px] text-raisin-100 whitespace-nowrap relative">
+    <MobileFilters />
+    <div className="hidden lg:flex w-full justify-between items-center">
+      <h3 className="text-[14px] min-w-[220px] lg:text-[16px] text-raisin-100 whitespace-nowrap relative">
         30 განცხადება
       </h3>
       <SortAndTimeFilters />
     </div>
-    <div className="my-6 flex flex-col gap-6">
+    <div className="my-2 lg:my-6 flex flex-col gap-0 md:gap-6">
       {isLoading && <Loader />}
       {!isLoading &&
         products.map((product) => (

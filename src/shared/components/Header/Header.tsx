@@ -5,7 +5,10 @@ const Header = () => {
   return (
     <header className="bg-surface h-20 py-[17px]">
       <Container>
-        <MyAutoLogo className="h-[46px] w-[161px]" aria-label="MyAuto" />
+        <MyAutoLogo
+          className="h-[46px] w-[161px] ml-[17px] md:ml-0"
+          aria-label="MyAuto"
+        />
       </Container>
     </header>
   );

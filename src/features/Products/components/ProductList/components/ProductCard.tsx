@@ -43,18 +43,43 @@ const ProductCard = ({ product }: Props) => {
   const productTitle = manufacturersMap?.[man_id] ?? '';
 
   return (
-    <article className="bg-surface h-[180px] rounded-xl w-full p-3">
-      <div className="flex gap-4">
-        <figure className="w-[170px] h-[156px] shrink-0 overflow-hidden rounded-lg cursor-pointer">
+    <article className="bg-surface md:h-[180px] md:rounded-xl w-full p-3">
+      <header className="md:hidden flex items-center justify-between gap-2 mb-3">
+        <h2 className="flex font-medium text-raisin-100 text-lg md:text-[14px]">
+          <a
+            className="line-clamp-1 text-raisin-100"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {productTitle}
+          </a>
+          <span className="ml-2 text-muted-gray font-medium whitespace-nowrap">
+            {`${prod_year}წ`}
+          </span>
+        </h2>
+        <aside className="flex items-center gap-3 shrink-0">
+          <div className="text-[14px] md:text-[12px] flex items-center">
+            <span
+              className={`${customs_passed ? 'text-success' : 'text-error'}`}
+            >
+              {customs_passed ? 'განბაჟებული' : 'განბაჟება'}
+            </span>
+          </div>
+        </aside>
+      </header>
+
+      <div className="flex flex-col md:flex-row gap-3 md:gap-4">
+        <figure className="w-full h-60 md:w-[170px] md:h-[156px] shrink-0 overflow-hidden rounded-lg cursor-pointer">
           <img
             src={generateImageUrl(photo, daily_views?.product_id, photo_ver)}
             alt={`${productTitle} Image`}
             className="w-full h-full object-cover rounded-md transition-transform duration-300 ease-in-out hover:scale-110"
           />
         </figure>
-        <section className="w-full flex flex-col justify-between">
-          <header className="flex items-center justify-between">
-            <h2 className="flex font-medium text-raisin-100 text-[14px] flex-row-reverse md:flex-row">
+
+        <section className="w-full flex flex-col justify-between gap-3 md:gap-0">
+          <header className="hidden md:flex items-center justify-between gap-2">
+            <h2 className="flex font-medium text-raisin-100 text-[14px]">
               <a
                 className="line-clamp-1 text-raisin-100"
                 target="_blank"
@@ -62,12 +87,12 @@ const ProductCard = ({ product }: Props) => {
               >
                 {productTitle}
               </a>
-              <span className="mr-2 ml-0 md:ml-2 flex text-muted-gray font-medium whitespace-nowrap">
+              <span className="ml-2 text-muted-gray font-medium whitespace-nowrap">
                 {`${prod_year}წ`}
               </span>
             </h2>
-            <aside className="flex items-center gap-3">
-              <div className="text-[12px] text-success flex items-center">
+            <aside className="flex items-center gap-3 shrink-0">
+              <div className="text-[12px] flex items-center">
                 <span
                   className={`${
                     customs_passed ? 'text-success' : 'text-error'
@@ -78,9 +103,10 @@ const ProductCard = ({ product }: Props) => {
               </div>
             </aside>
           </header>
-          <main>
-            <div className="flex w-full justify-between">
-              <dl className="flex gap-4">
+
+          <main className="flex flex-col gap-3">
+            <div className="flex w-full justify-between items-center">
+              <dl className="flex gap-3 md:gap-4">
                 <InfoDetail icon={<EngineSvg />}>
                   {engine_volume / 1000} {getFuelTypeLabel(fuel_type_id)}
                 </InfoDetail>
@@ -116,7 +142,8 @@ const ProductCard = ({ product }: Props) => {
                 )}
               </div>
             </div>
-            <dl className="flex gap-4 mt-2">
+
+            <dl className="flex gap-3 md:gap-4">
               <InfoDetail icon={<GearSvg />}>
                 {getGearTypeLabel(gear_type_id)}
               </InfoDetail>
@@ -125,6 +152,9 @@ const ProductCard = ({ product }: Props) => {
               </InfoDetail>
             </dl>
           </main>
+
+          <div className="md:hidden my-2 border-t border-border"></div>
+
           <footer className="flex gap-2">
             <div className="flex items-center text-[12px] text-muted-gray shrink-0">
               {daily_views?.views ?? 0} ნახვა

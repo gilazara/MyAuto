@@ -7,7 +7,7 @@ interface Props {
 
 const Breadcrumb = ({ items }: Props) => {
   return (
-    <div className="flex items-center mt-8 w-fit">
+    <div className="hidden lg:flex items-center mt-8 w-fit">
       {items.map((item, i) => {
         const isLast = i === items.length - 1;
         const content =

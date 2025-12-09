@@ -45,8 +45,8 @@ export const Products = () => {
   return (
     <Container>
       <Breadcrumb items={items} />
-      <div className="mt-[42px] flex gap-6 justify-between">
-        <div className="w-[250px] shrink-0">
+      <div className="mt-4 md:mt-[42px] flex gap-6 justify-between">
+        <div className="w-[250px] shrink-0 hidden lg:block">
           <FiltersForm />
         </div>
         <div className="flex-1">
