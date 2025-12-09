@@ -75,55 +75,35 @@ export const Select = ({
 
   const variantButtonClasses = useMemo(() => {
     return variant === 'primary'
-      ? 'bg-white text-gray-900'
-      : 'bg-gray-50 text-gray-800';
+      ? 'bg-white border-border focus:border-black text-text'
+      : 'bg-surface-muted text-text border-border focus:border-raisin-100';
   }, [variant]);
-
-  const errorButtonClasses = useMemo(() => {
-    if (error) {
-      return 'border-red-500 focus:ring-2 focus:ring-red-500';
-    }
-    return variant === 'primary'
-      ? 'border-gray-300 focus:border-black'
-      : 'border-gray-200 focus:border-gray-600';
-  }, [error, variant]);
 
   const interactivityButtonClasses = useMemo(() => {
     if (disabled) {
       return 'opacity-50 cursor-not-allowed';
     }
-    return variant === 'primary'
-      ? 'hover:border-black cursor-pointer'
-      : 'hover:border-gray-600 cursor-pointer';
-  }, [disabled, variant]);
 
-  const selectedTextClass = useMemo(() => {
-    if (selectedOption) {
-      return variant === 'primary' ? 'text-gray-900' : 'text-gray-800';
-    }
-    return 'text-gray-500';
-  }, [selectedOption, variant]);
-
-  const chevronColorClass = useMemo(() => {
-    return variant === 'primary' ? 'text-gray-400' : 'text-gray-500';
-  }, [variant]);
+    return 'hover:border-raisin-100 cursor-pointer';
+  }, [disabled]);
 
   const dropdownContainerClasses = useMemo(() => {
     return variant === 'primary'
-      ? 'bg-white border border-gray-300'
-      : 'bg-gray-50 border border-gray-200';
+      ? 'bg-white border border-border'
+      : 'bg-surface-muted border border-border';
   }, [variant]);
 
   const getOptionClasses = (isSelected: boolean, isHighlighted: boolean) => {
     const base =
       variant === 'primary'
-        ? 'text-gray-900 hover:bg-gray-50'
-        : 'text-gray-800 hover:bg-gray-100';
+        ? 'text-text hover:bg-surface-muted'
+        : 'text-text hover:bg-surface-muted';
     const selected =
       variant === 'primary'
-        ? 'font-bold bg-gray-50'
-        : 'font-semibold bg-gray-100';
-    const highlighted = variant === 'primary' ? 'bg-gray-100' : 'bg-gray-200';
+        ? 'font-bold bg-surface-muted'
+        : 'font-semibold bg-surface-muted';
+    const highlighted =
+      variant === 'primary' ? 'bg-surface-muted' : 'bg-surface-muted';
 
     if (isSelected) {
       return `${selected}`;
@@ -155,21 +135,23 @@ export const Select = ({
 
   return (
     <div className={`relative ${className}`} ref={selectRef}>
-      {label && (
-        <label className="block text-sm text-gray-700 mb-2">{label}</label>
-      )}
-      <button
-        type="button"
-        onClick={() => !disabled && setIsOpen(!isOpen)}
-        disabled={disabled}
-        className={`${baseButtonClasses} ${variantButtonClasses} ${errorButtonClasses} ${interactivityButtonClasses}`}
+      {label && <label className="block text-sm text-text mb-2">{label}</label>}
+      <div
+        className={`${baseButtonClasses} ${variantButtonClasses} ${interactivityButtonClasses} relative`}
+        role="combobox"
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         aria-controls={listboxId}
-        role="combobox"
       >
-        <div className="flex items-center gap-2 flex-1 text-sm">
-          <span className={selectedTextClass}>
+        <button
+          type="button"
+          onClick={() => !disabled && setIsOpen(!isOpen)}
+          disabled={disabled}
+          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+          aria-label={selectedOption ? selectedOption.label : placeholder}
+        />
+        <div className="flex items-center gap-2 flex-1 text-sm pointer-events-none">
+          <span className={selectedOption ? 'text-text' : 'text-text-muted'}>
             {selectedOption ? selectedOption.label : placeholder}
           </span>
         </div>
@@ -177,14 +159,14 @@ export const Select = ({
           <button
             type="button"
             onClick={handleClear}
-            className={`p-1 rounded cursor-pointer transition-colors ${chevronColorClass}`}
+            className={`p-1.5 rounded cursor-pointer transition-colors text-text-muted relative z-10`}
             aria-label="Clear selection"
           >
             <svg
               className="w-3 h-3"
               fill="none"
               stroke="currentColor"
-              viewBox="0 0 20 20"
+              viewBox="0 0 24 24"
             >
               <path
                 strokeLinecap="round"
@@ -196,22 +178,22 @@ export const Select = ({
           </button>
         ) : (
           <svg
-            className={`w-5 h-5 ${chevronColorClass} transition-transform duration-200 ${
+            className={`w-6 h-6 text-text-muted transition-transform duration-200 ${
               isOpen ? 'transform rotate-180' : ''
-            }`}
+            } pointer-events-none`}
             fill="none"
-            stroke="currentColor"
             viewBox="0 0 24 24"
           >
             <path
+              d="m15 11-3 3-3-3"
+              stroke="currentColor"
+              strokeWidth="1.4"
               strokeLinecap="round"
               strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
             />
           </svg>
         )}
-      </button>
+      </div>
 
       {isOpen && (
         <div
@@ -230,7 +212,7 @@ export const Select = ({
               key={option.value}
               type="button"
               onClick={() => handleSelect(option.value)}
-              className={`w-full flex items-center gap-2 px-4 py-2.5 text-left text-sm transition-colors ${getOptionClasses(
+              className={`w-full cursor-pointer flex items-center gap-2 px-4 py-2.5 text-left text-sm transition-colors ${getOptionClasses(
                 option.value === value,
                 idx === highlightedIndex
               )}`}
@@ -245,7 +227,7 @@ export const Select = ({
         </div>
       )}
 
-      {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
+      {error && <p className="mt-1 text-sm text-error">{error}</p>}
     </div>
   );
 };

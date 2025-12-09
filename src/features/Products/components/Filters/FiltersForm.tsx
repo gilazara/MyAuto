@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { useSearchParams } from 'react-router-dom';
-import { Button } from '@/shared';
+import { Button, Input } from '@/shared';
 import { SelectField } from '@/shared/components/Select';
 import { transformForSelect } from '@/utils/utils';
 import VehicleTabs from './components/VehicleTabs';
@@ -135,17 +135,41 @@ const FiltersForm = () => {
           ფასი
         </label>
         <div className="flex gap-2">
-          <input
+          <Input
             type="number"
             placeholder="დან"
-            {...register('priceFrom', { valueAsNumber: true })}
-            className="w-1/2 px-3 py-2.5 border border-gray-300 rounded-lg hover:border-black focus:outline-none focus:border-black transition-all"
+            min="0"
+            {...register('priceFrom', {
+              valueAsNumber: true,
+              setValueAs: (value) => {
+                const num = Number(value);
+                return isNaN(num) || num < 0 ? undefined : num;
+              },
+            })}
+            onInput={(e) => {
+              const input = e.currentTarget;
+              if (input.value && Number(input.value) < 0) {
+                input.value = '';
+              }
+            }}
           />
-          <input
+          <Input
             type="number"
             placeholder="მდე"
-            {...register('priceTo', { valueAsNumber: true })}
-            className="w-1/2 px-3 py-2.5 border border-gray-300 hover:border-black rounded-lg focus:border-black focus:outline-none transition-all"
+            min="0"
+            {...register('priceTo', {
+              valueAsNumber: true,
+              setValueAs: (value) => {
+                const num = Number(value);
+                return isNaN(num) || num < 0 ? undefined : num;
+              },
+            })}
+            onInput={(e) => {
+              const input = e.currentTarget;
+              if (input.value && Number(input.value) < 0) {
+                input.value = '';
+              }
+            }}
           />
         </div>
       </div>

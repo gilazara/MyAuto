@@ -9,12 +9,12 @@ interface InfoDetailProps {
 const InfoDetail = ({ icon, children, className }: InfoDetailProps) => {
   return (
     <div
-      className={`flex items-center min-w-30 gap-2 text-sm text-gray-700 ${
+      className={`flex items-center min-w-[120px] gap-2 text-sm ${
         className ?? ''
       }`}
     >
       {icon ? (
-        <span className="inline-flex items-center justify-center w-5 h-5 text-gray-600">
+        <span className="inline-flex items-center justify-center w-5 h-5 text-raisin-100">
           {icon}
         </span>
       ) : null}

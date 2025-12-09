@@ -37,7 +37,7 @@ const SortAndTimeFilters = () => {
       <SelectField
         name="SortOrder"
         placeholder="სორტირება"
-        className="w-[180px]"
+        className="min-w-[170px]"
         control={control}
         options={dateFilterOptions}
         onValueChange={(value) => handleFilterChange('SortOrder', value)}

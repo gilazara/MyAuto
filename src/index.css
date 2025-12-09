@@ -14,13 +14,20 @@
   --color-surface: #ffffff;
   --color-surface-muted: #f9f9fb;
   --color-border: #e9e9f0;
+
+  /* Product Card Colors */
+  --color-muted-gray: #8996ae;
+  --color-success: #26b753;
+  --color-error: #ff3b30;
+  --color-raisin-100: rgb(28 31 41);
+  --color-raisin-10: #e9e9f0;
 }
 
 /*
   Responsive container:
   - At 1920px viewport, width resolves to 1050px
-  - Scales down below 1920px using vw
-  - Clamps to a minimum to keep layout usable on small screens
+  - Grows proportionally on smaller screens (takes more % of viewport)
+  - Clamps to max 1050px on larger screens and min on very small screens
 */
 .container {
   margin-left: auto;
@@ -30,18 +37,35 @@
   padding-right: var(--container-gutter, 16px);
 
   /*
-    1050 / 1920 = 0.546875 -> 54.6875vw
-    Use clamp(min, preferred, max):
-    - min: 320px (adjust as needed for your design)
-    - preferred: 54.6875vw (scales with viewport width)
-    - max: 1050px (caps at desktop)
+    At 1920px: 54.6875vw = 1050px
+    At 1366px: 76.8vw = 1050px (clamped to max)
+    At 768px: 90vw = 691px (grows to take more space)
+    At 375px: 95vw = 356px (takes most of the screen)
   */
-  width: clamp(320px, 54.6875vw, 1050px);
+  width: clamp(280px, 90vw, 1050px);
 }
 
-/* Optional: relax min width slightly on very small devices */
-@media (max-width: 360px) {
+/* Gradually reduce container width percentage as screen gets larger */
+@media (min-width: 768px) {
   .container {
-    width: clamp(280px, 90vw, 1050px);
+    width: clamp(280px, 80vw, 1050px);
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    width: clamp(280px, 75vw, 1050px);
+  }
+}
+
+@media (min-width: 1366px) {
+  .container {
+    width: clamp(280px, 60vw, 1050px);
+  }
+}
+
+@media (min-width: 1920px) {
+  .container {
+    width: clamp(280px, 54.6875vw, 1050px);
   }
 }

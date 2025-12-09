@@ -15,30 +15,27 @@ const ProductList = ({
   meta,
   isLoading,
   onPageChange,
-}: Props) => {
-  return (
-    <div className="w-full">
-      <div className="flex justify-between items-center">
-        <h3 className="text-[#272A37] text-md">{products.length} განცხადება</h3>
-        <SortAndTimeFilters />
-      </div>
-      <div className="my-6 flex flex-col gap-6">
-        {isLoading && <Loader />}
-        {!isLoading &&
-          products.map((product) => (
-            <ProductCard
-              product={product}
-              key={product.daily_views?.product_id}
-            />
-          ))}
-      </div>
-      {products.length > 0 && (
-        <div className="bg-white mb-10 rounded-xl w-full shadow-sm p-3 max-w-3xl mx-auto font-sans">
-          <Pagination meta={meta} onPageChange={onPageChange} />
-        </div>
-      )}
+}: Props) => (
+  <>
+    <div className="flex w-full justify-between items-center">
+      <h3 className="text-[12px] md:text-[14px] min-w-[220px] lg:text-[16px] text-raisin-100 whitespace-nowrap relative">
+        30 განცხადება
+      </h3>
+      <SortAndTimeFilters />
     </div>
-  );
-};
+    <div className="my-6 flex flex-col gap-6">
+      {isLoading && <Loader />}
+      {!isLoading &&
+        products.map((product) => (
+          <ProductCard product={product} key={product.car_id} />
+        ))}
+    </div>
+    {meta && meta?.total > 0 && meta?.last_page && meta.last_page > 1 && (
+      <div className="bg-white mb-10 rounded-xl w-full shadow-sm p-3 max-w-3xl mx-auto font-sans">
+        <Pagination meta={meta} onPageChange={onPageChange} />
+      </div>
+    )}
+  </>
+);
 
 export default ProductList;

@@ -4,3 +4,4 @@ export * from './components/Tab';
 export * from './components/Container';
 export * from './components/Loader';
 export * from './components/Pagination';
+export * from './components/Input';
