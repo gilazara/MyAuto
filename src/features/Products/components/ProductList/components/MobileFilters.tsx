@@ -34,7 +34,7 @@ const MobileFilters = () => {
   const currentSortOrder = searchParams.get('SortOrder');
 
   return (
-    <div className="px-2 lg:hidden w-[300px] mb-4 overflow-hidden">
+    <div className="px-2 lg:hidden w-[355px] mb-4 overflow-hidden">
       <div className="flex gap-2 overflow-x-auto overflow-y-hidden pb-2 scrollbar-hide -mx-4 px-4">
         {timeFilterOptions.map((option) => {
           const isSelected = currentPeriod === option.value;
@@ -76,8 +76,8 @@ const MobileFilters = () => {
           return (
             <button
               key={option.value}
-              onClick={() => handleFilterSelect('SortOrder', option.value)}
-              className={`shrink-0 cursor-pointer px-4 py-2 rounded-xl bg-surface border transition-all duration-200 text-sm font-medium whitespace-nowrap flex items-center gap-2`}
+              onClick={() => handleFilterSelect('Period', option.value)}
+              className={`shrink-0 cursor-pointer px-4 py-2 rounded-xl bg-surface transition-all duration-200 text-sm font-medium whitespace-nowrap flex items-center gap-2`}
             >
               <span>{option.label}</span>
               {isSelected && (

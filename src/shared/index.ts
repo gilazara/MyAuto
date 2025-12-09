@@ -5,3 +5,4 @@ export * from './components/Container';
 export * from './components/Loader';
 export * from './components/Pagination';
 export * from './components/Input';
+export * from './components/PageLoader';

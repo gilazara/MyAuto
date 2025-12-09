@@ -1,5 +1,6 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
+import { PageLoader } from '../shared';
 
 const AppLayout = lazy(() => import('../App'));
 const Products = lazy(() =>
@@ -10,7 +11,7 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: (
-      <Suspense fallback={<div className="p-6">Loading...</div>}>
+      <Suspense fallback={<PageLoader />}>
         <AppLayout />
       </Suspense>
     ),
@@ -18,7 +19,7 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: (
-          <Suspense fallback={<div className="p-6">Loading...</div>}>
+          <Suspense fallback={<PageLoader />}>
             <Navigate to="/product" replace />
           </Suspense>
         ),
@@ -26,7 +27,7 @@ export const router = createBrowserRouter([
       {
         path: 'product',
         element: (
-          <Suspense fallback={<div className="p-6">Loading...</div>}>
+          <Suspense fallback={<PageLoader />}>
             <Products />
           </Suspense>
         ),
