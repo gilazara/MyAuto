@@ -28,6 +28,7 @@ const SortAndTimeFilters = () => {
     <div className="flex gap-2">
       <SelectField
         name="Period"
+        variant="secondary"
         className="w-[130px]"
         placeholder="პერიოდი"
         control={control}
@@ -36,6 +37,7 @@ const SortAndTimeFilters = () => {
       />
       <SelectField
         name="SortOrder"
+        variant="secondary"
         placeholder="სორტირება"
         className="min-w-[170px]"
         control={control}

@@ -20,7 +20,7 @@ const Input = ({
   ...props
 }: InputProps) => {
   const widthClass = fullWidth ? 'w-full' : 'w-1/2';
-  const baseClassName = `${widthClass} px-3 text-sm py-2.5 border border-gray-300 rounded-lg hover:border-border focus:outline-none focus:border-black transition-all [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`;
+  const baseClassName = `${widthClass} px-3 text-sm py-2.5 border border-border rounded-lg hover:border-raisin-100 focus:outline-none focus:border-text transition-all [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-surface text-text`;
   const finalClassName = className
     ? `${baseClassName} ${className}`
     : baseClassName;

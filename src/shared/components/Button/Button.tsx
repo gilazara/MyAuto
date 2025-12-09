@@ -26,7 +26,7 @@ export const Button = ({
     secondary:
       'bg-surface text hover:bg-surface-muted border border-border focus:ring-border',
     danger:
-      'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500 active:bg-red-800',
+      'bg-error text-white hover:brightness-95 focus:ring-error active:brightness-90',
   };
 
   const sizeClasses = {

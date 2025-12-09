@@ -102,7 +102,7 @@ const FiltersForm = () => {
   return (
     <form
       onSubmit={handleFormSubmit}
-      className="bg-surface rounded-lg shadow-md"
+      className="bg-surface rounded-md shadow-md"
     >
       <VehicleTabs />
 
@@ -130,11 +130,11 @@ const FiltersForm = () => {
         />
       </div>
 
+      <hr className="my-6 border-t border-border" />
+
       <div className="my-6 px-6">
-        <label className="block text-sm font-semibold text-gray-700 mb-2">
-          ფასი
-        </label>
-        <div className="flex gap-2">
+        <label className="block text-sm text-text mb-2">ფასი</label>
+        <div className="flex gap-2 items-center">
           <Input
             type="number"
             placeholder="დან"
@@ -153,6 +153,7 @@ const FiltersForm = () => {
               }
             }}
           />
+          <span className="text-text">-</span>
           <Input
             type="number"
             placeholder="მდე"

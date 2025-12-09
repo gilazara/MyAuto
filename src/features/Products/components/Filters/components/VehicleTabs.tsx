@@ -17,7 +17,7 @@ const VehicleTabs = () => {
     vehicleType === type ? 'var(--color-brand)' : 'var(--color-text-muted)';
 
   return (
-    <div className="w-full flex mb-6">
+    <div className="w-full flex mb-6 overflow-hidden rounded-t-md">
       {VEHICLE_TABS.map(({ type, Icon }) => (
         <Tab
           key={type}

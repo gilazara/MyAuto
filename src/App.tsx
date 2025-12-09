@@ -3,7 +3,7 @@ import Header from './shared/components/Header/Header';
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-surface-muted">
       <Header />
       <Outlet />
     </div>

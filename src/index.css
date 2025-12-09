@@ -48,13 +48,13 @@
 /* Gradually reduce container width percentage as screen gets larger */
 @media (min-width: 768px) {
   .container {
-    width: clamp(280px, 80vw, 1050px);
+    width: clamp(280px, 100vw, 1050px);
   }
 }
 
 @media (min-width: 1024px) {
   .container {
-    width: clamp(280px, 75vw, 1050px);
+    width: clamp(280px, 80vw, 1050px);
   }
 }
 

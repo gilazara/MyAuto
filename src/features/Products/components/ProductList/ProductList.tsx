@@ -31,7 +31,7 @@ const ProductList = ({
         ))}
     </div>
     {meta && meta?.total > 0 && meta?.last_page && meta.last_page > 1 && (
-      <div className="bg-white mb-10 rounded-xl w-full shadow-sm p-3 max-w-3xl mx-auto font-sans">
+      <div className="bg-surface mb-10 rounded-xl w-full shadow-sm p-3 max-w-3xl mx-auto font-sans">
         <Pagination meta={meta} onPageChange={onPageChange} />
       </div>
     )}

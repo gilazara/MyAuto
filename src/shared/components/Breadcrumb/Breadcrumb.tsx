@@ -14,14 +14,14 @@ const Breadcrumb = ({ items }: Props) => {
           item.to && !isLast ? (
             <Link
               to={item.to}
-              className="text-sm text-[#6F7383] hover:underline"
+              className="text-sm text-text-muted hover:underline"
             >
               {item.label}
             </Link>
           ) : (
             <span
               className={`text-sm ${
-                isLast ? 'text-primary font-medium' : 'text-[#6F7383]'
+                isLast ? 'text-primary font-medium' : 'text-text-muted'
               }`}
             >
               {item.label}

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useMemo, useId } from 'react';
+import React, { useState, useRef, useEffect, useId } from 'react';
 
 export interface SelectOption {
   value: string;
@@ -13,7 +13,7 @@ export interface SelectProps {
   placeholder?: string;
   disabled?: boolean;
   className?: string;
-  error?: string | undefined;
+  error?: string;
   label?: string;
   variant?: 'primary' | 'secondary';
   isClearable?: boolean;
@@ -34,11 +34,9 @@ export const Select = ({
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
   const listboxRef = useRef<HTMLDivElement>(null);
-  const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
+  const [highlightedIndex, setHighlightedIndex] = useState(-1);
 
-  const reactId = useId();
-  const listboxId = useMemo(() => `select-listbox-${reactId}`, [reactId]);
-
+  const listboxId = `select-listbox-${useId()}`;
   const selectedOption = options.find((opt) => opt.value === value);
 
   useEffect(() => {
@@ -67,51 +65,14 @@ export const Select = ({
     setIsOpen(false);
   };
 
-  const baseButtonClasses = useMemo(
-    () =>
-      'w-full flex items-center justify-between px-4 py-2.5 border rounded-lg text-left transition-all duration-200',
-    []
-  );
-
-  const variantButtonClasses = useMemo(() => {
-    return variant === 'primary'
-      ? 'bg-white border-border focus:border-black text-text'
-      : 'bg-surface-muted text-text border-border focus:border-raisin-100';
-  }, [variant]);
-
-  const interactivityButtonClasses = useMemo(() => {
-    if (disabled) {
-      return 'opacity-50 cursor-not-allowed';
-    }
-
-    return 'hover:border-raisin-100 cursor-pointer';
-  }, [disabled]);
-
-  const dropdownContainerClasses = useMemo(() => {
-    return variant === 'primary'
-      ? 'bg-white border border-border'
-      : 'bg-surface-muted border border-border';
-  }, [variant]);
-
   const getOptionClasses = (isSelected: boolean, isHighlighted: boolean) => {
-    const base =
-      variant === 'primary'
-        ? 'text-text hover:bg-surface-muted'
-        : 'text-text hover:bg-surface-muted';
-    const selected =
-      variant === 'primary'
-        ? 'font-bold bg-surface-muted'
-        : 'font-semibold bg-surface-muted';
-    const highlighted =
-      variant === 'primary' ? 'bg-surface-muted' : 'bg-surface-muted';
-
     if (isSelected) {
-      return `${selected}`;
+      return 'font-bold bg-surface-muted';
     }
     if (isHighlighted) {
-      return `${base} ${highlighted}`;
+      return 'text-text hover:bg-surface-muted bg-surface-muted';
     }
-    return base;
+    return 'text-text hover:bg-surface-muted';
   };
 
   useEffect(() => {
@@ -133,11 +94,19 @@ export const Select = ({
     }
   }, [isOpen, highlightedIndex]);
 
+  const buttonClasses = `w-full flex items-center justify-between px-4 py-2.5 border rounded-lg text-left transition-all duration-200 bg-surface text-text border-border relative ${
+    disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+  } ${
+    variant === 'primary' && !disabled
+      ? 'focus:border-text hover:border-raisin-100'
+      : ''
+  }`;
+
   return (
     <div className={`relative ${className}`} ref={selectRef}>
       {label && <label className="block text-sm text-text mb-2">{label}</label>}
       <div
-        className={`${baseButtonClasses} ${variantButtonClasses} ${interactivityButtonClasses} relative`}
+        className={buttonClasses}
         role="combobox"
         aria-haspopup="listbox"
         aria-expanded={isOpen}
@@ -159,7 +128,7 @@ export const Select = ({
           <button
             type="button"
             onClick={handleClear}
-            className={`p-1.5 rounded cursor-pointer transition-colors text-text-muted relative z-10`}
+            className="p-1.5 rounded cursor-pointer transition-colors text-text-muted relative z-10"
             aria-label="Clear selection"
           >
             <svg
@@ -178,9 +147,9 @@ export const Select = ({
           </button>
         ) : (
           <svg
-            className={`w-6 h-6 text-text-muted transition-transform duration-200 ${
+            className={`w-6 h-6 text-text-muted transition-transform duration-200 pointer-events-none ${
               isOpen ? 'transform rotate-180' : ''
-            } pointer-events-none`}
+            }`}
             fill="none"
             viewBox="0 0 24 24"
           >
@@ -197,7 +166,7 @@ export const Select = ({
 
       {isOpen && (
         <div
-          className={`absolute z-50 w-full mt-2 rounded-lg shadow-lg max-h-60 overflow-y-auto ${dropdownContainerClasses}`}
+          className="absolute z-50 w-full mt-2 rounded-lg shadow-lg max-h-60 overflow-y-auto bg-surface border border-border"
           role="listbox"
           id={listboxId}
           aria-activedescendant={

@@ -43,7 +43,7 @@ const ProductCard = ({ product }: Props) => {
   const productTitle = manufacturersMap?.[man_id] ?? '';
 
   return (
-    <article className="bg-white h-[180px] rounded-xl w-full p-3">
+    <article className="bg-surface h-[180px] rounded-xl w-full p-3">
       <div className="flex gap-4">
         <figure className="w-[170px] h-[156px] shrink-0 overflow-hidden rounded-lg cursor-pointer">
           <img
@@ -70,7 +70,7 @@ const ProductCard = ({ product }: Props) => {
               <div className="text-[12px] text-success flex items-center">
                 <span
                   className={`${
-                    customs_passed ? 'text-green-600' : 'text-error'
+                    customs_passed ? 'text-success' : 'text-error'
                   }`}
                 >
                   {customs_passed ? 'განბაჟებული' : 'განბაჟება'}
@@ -106,7 +106,7 @@ const ProductCard = ({ product }: Props) => {
                         : Number(((price_usd ?? 0) * 2.7).toFixed(1))
                     )}
                     {currency === Currency.USD ? (
-                      <span className="p-0.2 bg-gray-100 rounded-3xl cursor-pointer">
+                      <span className="p-0.2 bg-surface-muted rounded-3xl cursor-pointer">
                         <DollarSvg className="w-6 h-6" />
                       </span>
                     ) : (
